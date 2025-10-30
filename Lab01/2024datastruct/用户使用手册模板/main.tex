@@ -1,0 +1,88 @@
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage[UTF8]{ctex}  % 用于中文
+\usepackage{graphicx}  % 添加这行来加载插图功能
+
+\usepackage{xcolor}
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily,
+  showstringspaces=false,
+  commentstyle=\color{red},
+  keywordstyle=\color{blue}
+}
+
+\linespread{1.0}  % 设置1倍行间距
+\usepackage{geometry}
+\geometry{
+    left=2cm,
+    right=2cm,
+    top=3cm,
+    bottom=3cm,
+}
+\usepackage{titling}
+\usepackage[pagebackref]{hyperref} % 引用
+\usepackage{cleveref}
+\crefname{figure}{Fig}{Figs}
+
+\begin{document}
+\renewcommand{\labelitemii}{$\circ$} % 第二层级符号为圆圈
+
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------
+
+\setlength{\droptitle}{-3cm}
+\title{基础实验：用户使用手册（模板）}
+\author{姓名：xxx \and 学号：xxx}
+\date{2024年xx月xx日}
+\maketitle
+
+
+
+
+\section{本软件运行环境}
+
+写明软件程序所需运行环境。
+
+
+\section{操作指令及预期结果}
+
+\subsection{启动}
+
+如何启动本软件？
+
+默认可执行程序文件在所提交文件夹的software目录中。
+
+%明确指出可执行文件（如.exe可执行程序）等，需写明文件或命令行输入。
+
+\begin{lstlisting}[language=bash,caption={Launch the software in the terminal}]
+#!/bin/bash
+cd dir_of_your_submission/software 
+./your_exe_name [input_filename] [extra_params]
+\end{lstlisting}
+
+
+\subsection{功能与提示}
+
+写明关键操作功能和对应输出提示等。
+
+\subsection{退出}
+
+写明退出操作。
+
+\subsection{注意事项}
+
+使用本软件应注意的事项。
+
+ 
+% --------------------------------------------------------------
+%     You don't have to mess with anything below this line.
+% --------------------------------------------------------------
+
+\end{document}

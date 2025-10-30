@@ -1,0 +1,1 @@
+v.a = new int[v.n];
