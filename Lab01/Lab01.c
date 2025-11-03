@@ -65,9 +65,8 @@ void PopBack(my_vector *v){
 }
 //----------------------------------------------------------
 
-//----------------------------------------------------------
 //函数名： Insert
-//参数： my_vector &v, int p, int x
+//参数： my_vector *v, int p, int x
 //功能实现：在动态数组的第p个位置插入元素x
 //返回值： 无
 void Insert(my_vector *v, int p, int x){
@@ -76,38 +75,30 @@ void Insert(my_vector *v, int p, int x){
         return;
     }
     
-    int *newa = (int*)malloc((v->n + 1) * sizeof(int));
-    if (newa == NULL) {
-        printf("Memory allocation failed!\n");
-        return;
-    }
+    // 使用realloc调整内存大小，避免手动复制
+    int *newa = (int*)realloc(v->a, (v->n + 1) * sizeof(int));
+    v->a = newa;
     
-    // 复制插入位置之前的元素
-    for (int i = 0; i < p - 1; i++){
-        newa[i] = v->a[i];
+    // 将插入位置及之后的元素向后移动一位
+    for (int i = v->n; i >= p; i--) {
+        v->a[i] = v->a[i - 1];
     }
     
     // 插入新元素
-    newa[p - 1] = x;
-    
-    // 复制插入位置之后的元素
-    for (int i = p - 1; i < v->n; i++){
-        newa[i + 1] = v->a[i];
-    }
-    
-    free(v->a);
-    v->a = newa;
+    v->a[p - 1] = x;
     v->n += 1;
     
+    // 输出当前数组
     for (int i = 0; i < v->n; i++){
         printf("%d ", v->a[i]);
     }
     printf("\n");
 }
+
 //----------------------------------------------------------
 
 //函数名： Erase
-//参数： my_vector v, int p
+//参数： my_vector *v, int p
 //功能实现：删除动态数组的第p个位置的元素
 //返回值： 无
 void Erase(my_vector *v, int p){
@@ -121,36 +112,25 @@ void Erase(my_vector *v, int p){
         free(v->a);
         v->a = NULL;
         v->n = 0;
-        printf("Array is now empty\n");
+        printf("Array is empty\n");
         return;
     }
     
-    int *newa = (int*)malloc((v->n - 1) * sizeof(int));
-    if (newa == NULL) {
-        printf("Memory allocation failed!\n");
-        return;
+    // 将删除位置之后的元素向前移动一位
+    for (int i = p - 1; i < v->n - 1; i++) {
+        v->a[i] = v->a[i + 1];
     }
     
-    // 复制删除位置之前的元素
-    for (int i = 0; i < p - 1; i++){
-        newa[i] = v->a[i];
-    }
-    
-    // 跳过要删除的元素，复制后面的元素
-    for (int i = p; i < v->n; i++){
-        newa[i - 1] = v->a[i];
-    }
-    
-    free(v->a);
-    v->a = newa;
+    // 使用realloc缩小内存
+    int *newa = (int*)realloc(v->a, (v->n - 1) * sizeof(int));
     v->n -= 1;
     
+    // 输出当前数组
     for (int i = 0; i < v->n; i++){
         printf("%d ", v->a[i]);
     }
     printf("\n");
 }
-//----------------------------------------------------------
 
 //函数名： Update
 //参数： my_vector &v, int p, int x
