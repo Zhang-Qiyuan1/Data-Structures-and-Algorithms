@@ -65,48 +65,88 @@ void PopBack(my_vector *v){
 }
 //----------------------------------------------------------
 
+//----------------------------------------------------------
 //函数名： Insert
 //参数： my_vector &v, int p, int x
 //功能实现：在动态数组的第p个位置插入元素x
 //返回值： 无
-void Insert(my_vector v, int p, int x){
-    if (p < 0 || p > v.n) return;
-    int *newa = (int*)malloc((v.n + 1) * sizeof(int));
+void Insert(my_vector *v, int p, int x){
+    if (p < 1 || p > v->n + 1) {
+        printf("Invalid position!\n");
+        return;
+    }
+    
+    int *newa = (int*)malloc((v->n + 1) * sizeof(int));
+    if (newa == NULL) {
+        printf("Memory allocation failed!\n");
+        return;
+    }
+    
+    // 复制插入位置之前的元素
     for (int i = 0; i < p - 1; i++){
-        newa[i] = v.a[i];
+        newa[i] = v->a[i];
     }
+    
+    // 插入新元素
     newa[p - 1] = x;
-    for (int i = p - 1; i < v.n; i++){
-        newa[i + 1] = v.a[i];
+    
+    // 复制插入位置之后的元素
+    for (int i = p - 1; i < v->n; i++){
+        newa[i + 1] = v->a[i];
     }
-    free(v.a);
-    v.a = newa;
-    v.n += 1;
-    for (int i = 0; i < v.n; i++){
-        printf("%d ", v.a[i]);
+    
+    free(v->a);
+    v->a = newa;
+    v->n += 1;
+    
+    for (int i = 0; i < v->n; i++){
+        printf("%d ", v->a[i]);
     }
     printf("\n");
 }
 //----------------------------------------------------------
 
 //函数名： Erase
-//参数： my_vector &v, int p
+//参数： my_vector v, int p
 //功能实现：删除动态数组的第p个位置的元素
 //返回值： 无
-void Erase(my_vector v, int p){
-    if (p < 0 || p >= v.n) return;
-    int *newa = (int*)malloc((v.n - 1) * sizeof(int));
+void Erase(my_vector *v, int p){
+    if (p < 1 || p > v->n) {
+        printf("Invalid position!\n");
+        return;
+    }
+    
+    if (v->n == 1) {
+        // 如果只有一个元素，直接清空
+        free(v->a);
+        v->a = NULL;
+        v->n = 0;
+        printf("Array is now empty\n");
+        return;
+    }
+    
+    int *newa = (int*)malloc((v->n - 1) * sizeof(int));
+    if (newa == NULL) {
+        printf("Memory allocation failed!\n");
+        return;
+    }
+    
+    // 复制删除位置之前的元素
     for (int i = 0; i < p - 1; i++){
-        newa[i] = v.a[i];
+        newa[i] = v->a[i];
     }
-    for (int i = p; i < v.n; i++){
-        newa[i - 1] = v.a[i];
+    
+    // 跳过要删除的元素，复制后面的元素
+    for (int i = p; i < v->n; i++){
+        newa[i - 1] = v->a[i];
     }
-    free(v.a);
-    v.a = newa;
-    v.n -= 1;
-    for (int i = 0; i < v.n; i++){
-        printf("%d ", v.a[i]);
+    
+    free(v->a);
+    v->a = newa;
+    v->n -= 1;
+    
+    for (int i = 0; i < v->n; i++){
+        printf("%d ", v->a[i]);
     }
     printf("\n");
 }
@@ -116,11 +156,14 @@ void Erase(my_vector v, int p){
 //参数： my_vector &v, int p, int x
 //功能实现：更新动态数组第p个位置的元素为x
 //返回值： 无
-void Update(my_vector v, int p, int x){
-    if (p <= 0 || p >= v.n) return;
-    v.a[p - 1] = x;
-    for (int i = 0; i < v.n; i++){
-        printf("%d ", v.a[i]);
+void Update(my_vector *v, int p, int x){
+    if (p < 1 || p > v->n) {
+        printf("Invalid position!\n");
+        return;
+    }
+    v->a[p - 1] = x;
+    for (int i = 0; i < v->n; i++){
+        printf("%d ", v->a[i]);
     }
     printf("\n");
 }
@@ -267,17 +310,17 @@ void InputOperation(){
             int p, x;
             printf("Enter the position and value to insert: ");
             scanf("%d %d", &p, &x);
-            Insert(v, p, x);
+            Insert(&v, p, x);
         } else if (strcmp(operation, "erase") == 0){
             int p;
             printf("Enter the position to erase: ");
             scanf("%d", &p);
-            Erase(v, p);
+            Erase(&v, p);
         } else if (strcmp(operation, "update") == 0){
             int p, x;
             printf("Enter the position and new value to update: ");
             scanf("%d %d", &p, &x);
-            Update(v, p, x);
+            Update(&v, p, x);
         } else if (strcmp(operation, "save") == 0){
             char file_name[50];
             printf("Enter the file name to save (with .txt or .bin extension): ");
